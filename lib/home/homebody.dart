@@ -8,14 +8,14 @@ class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
   @override
   Widget build(BuildContext context) {
-    //RecipeDetails Test
-    Recipe recipe = Recipe(
-        name: "My Recipe",
-        image:
-            'https://img.freepik.com/free-vector/recipe-book-concept-illustration_114360-7481.jpg?size=626&ext=jpg&ga=GA1.2.1930064736.1678329442&semt=sph',
-        rating: .71,
-        serving: 5,
-        instructions: ["instructions", "test"]);
+    // //RecipeDetails Test
+    // Recipe recipe = Recipe(
+    //     name: "My Recipe",
+    //     image:
+    //         'https://img.freepik.com/free-vector/recipe-book-concept-illustration_114360-7481.jpg?size=626&ext=jpg&ga=GA1.2.1930064736.1678329442&semt=sph',
+    //     rating: .71,
+    //     serving: 5,
+    //     instructions: ["instructions", "test"]);
     //Create Card Variables
     const createText = "Create Recipes";
     const createSubText = "Create Your Own Recipes";
@@ -57,12 +57,7 @@ class HomeBody extends StatelessWidget {
         ),
 
         //Create Card
-        GestureDetector(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Details(
-                      recipe: recipe,
-                    ))),
-            child: containCard(createText, createSubText, createUrl)),
+        containCard(createText, createSubText, createUrl),
 
         const SizedBox(
           height: 8,

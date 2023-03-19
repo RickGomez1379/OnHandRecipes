@@ -10,7 +10,30 @@ class DetailBody extends StatelessWidget {
   Widget build(BuildContext context) {
     // It provide us total height and width
     Size size = MediaQuery.of(context).size;
+    List<Widget> instructions = [];
 
+    for (int i = 0; i < recipe.instructions.length; i++) {
+      instructions.add(
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          const Text("•"),
+          Expanded(
+            child: Text(
+              recipe.instructions[i],
+              style: const TextStyle(fontSize: 11),
+            ),
+          ),
+        ]),
+      );
+    }
+    // for (int i = 1; i <= 5; i++) {
+    //   instructions.add(
+    //     SizedBox(
+    //       child: Text(
+    //         recipe.ingredients[i],
+    //       ),
+    //     ),
+    //   );
+    // }
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -25,7 +48,7 @@ class DetailBody extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(top: size.height * 0.3),
                   padding: EdgeInsets.only(
-                    top: size.height * 0.12,
+                    top: size.height * 0.05,
                     left: 20.0,
                     right: 20.0,
                   ),
@@ -37,7 +60,15 @@ class DetailBody extends StatelessWidget {
                       topRight: Radius.circular(24),
                     ),
                   ),
+                  child: Flex(direction: Axis.vertical, children: [
+                    Expanded(
+                      child: Column(
+                        children: instructions,
+                      ),
+                    ),
+                  ]),
                 ),
+
                 // ProductTitleWithImage(product: product)
               ],
             ),

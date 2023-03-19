@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onhandrecipes2/RecipesContent/Details.dart';
+import 'package:onhandrecipes2/RecipesContent/Recipe.dart';
+import 'package:onhandrecipes2/RecipesContent/recipecard.dart';
+import 'package:onhandrecipes2/RecipesContent/recipes.api.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -8,6 +12,26 @@ class Category extends StatefulWidget {
 }
 
 class CategoryState extends State<Category> {
+  //List for Recipes
+  List<Recipe> recipes = [];
+
+  //For waiting on getRecipe
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getRecipe(selectedIndex);
+  }
+
+  Future<void> getRecipe(int i) async {
+    recipes = await RecipesAPI.getRecipe(0, 20);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   //List for horizontal ListView
   List<String> categories = [
     "All",
@@ -24,12 +48,52 @@ class CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     //Horizontal Scroll View
-    return SizedBox(
-      height: 25,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: categories.length,
-          itemBuilder: (context, index) => buildCategory(categories, index)),
+    return Column(children: <Widget>[
+      SizedBox(
+        height: 25,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) => buildCategory(categories, index)),
+      ),
+      Recipe_Cards()
+    ]);
+  }
+
+  // ignore: non_constant_identifier_names
+  Expanded Recipe_Cards() {
+    return Expanded(
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: recipes.length,
+              itemBuilder: (context, index) {
+                if (double.tryParse(recipes[index].rating.toString()) == null) {
+                  return InkWell(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Details(recipe: recipes[index]))),
+                    child: RecipeCard(
+                        title: recipes[index].name,
+                        cardServings: recipes[index].serving,
+                        cardRating: "no rating",
+                        cardImage: recipes[index].image),
+                  );
+                } else {
+                  return InkWell(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Details(recipe: recipes[index]))),
+                    child: RecipeCard(
+                        title: recipes[index].name,
+                        cardServings: recipes[index].serving,
+                        cardRating: recipes[index].rating * 100,
+                        cardImage: recipes[index].image),
+                  );
+                }
+              }),
     );
   }
 

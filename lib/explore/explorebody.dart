@@ -7,6 +7,6 @@ class ExploreBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: const <Widget>[Category(), Recipes()]);
+    return const Category();
   }
 }
