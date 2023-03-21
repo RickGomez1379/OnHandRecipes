@@ -14,6 +14,11 @@ class Category extends StatefulWidget {
 class CategoryState extends State<Category> {
   //List for Recipes
   List<Recipe> recipes = [];
+  List<Recipe> all = [];
+  List<Recipe> vegan = [];
+  List<Recipe> mexican = [];
+  List<Recipe> japanese = [];
+  List<Recipe> american = [];
 
   //For waiting on getRecipe
   bool isLoading = true;
@@ -21,28 +26,24 @@ class CategoryState extends State<Category> {
   @override
   void initState() {
     super.initState();
-    getRecipe(selectedIndex);
+    getRecipe();
   }
 
-  Future<void> getRecipe(int i) async {
-    recipes = await RecipesAPI.getRecipe(0, 20);
+  Future<void> getRecipe() async {
+    recipes = await RecipesAPI.getRecipe(0, 20, 0);
+    vegan = await RecipesAPI.getRecipe(0, 20, 1);
+    mexican = await RecipesAPI.getRecipe(0, 20, 2);
+    japanese = await RecipesAPI.getRecipe(0, 20, 3);
+    american = await RecipesAPI.getRecipe(0, 20, 4);
 
     setState(() {
+      all = recipes;
       isLoading = false;
     });
   }
 
   //List for horizontal ListView
-  List<String> categories = [
-    "All",
-    "Vegan",
-    "Mexican",
-    "Italian",
-    "Indian",
-    "Japanese",
-    "Chinese",
-    "British"
-  ];
+  List<String> categories = ["All", "Vegan", "Mexican", "Japanese", "American"];
   //Index for ListView
   int selectedIndex = 0;
   @override
@@ -103,6 +104,17 @@ class CategoryState extends State<Category> {
       onTap: () {
         setState(() {
           selectedIndex = index;
+          if (selectedIndex == 0) {
+            recipes = all;
+          } else if (selectedIndex == 1) {
+            recipes = vegan;
+          } else if (selectedIndex == 2) {
+            recipes = mexican;
+          } else if (selectedIndex == 3) {
+            recipes = japanese;
+          } else if (selectedIndex == 4) {
+            recipes = american;
+          }
         });
       },
       child: Padding(
