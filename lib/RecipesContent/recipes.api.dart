@@ -35,11 +35,11 @@ class RecipesAPI {
         {"from": "$from", "size": "$to", "tags": "american"});
 
     final response = await Future.wait([
-      http.get(uriAll, headers: header),
-      http.get(uriVegan, headers: header),
-      http.get(uriMexican, headers: header),
-      http.get(uriJapanese, headers: header),
-      http.get(uriAmerican, headers: header),
+      delayedResponse(uriAll, header),
+      delayedResponse(uriVegan, header),
+      delayedResponse(uriMexican, header),
+      delayedResponse(uriJapanese, header),
+      delayedResponse(uriAmerican, header)
     ]);
 
     //Decodes data
@@ -64,5 +64,11 @@ class RecipesAPI {
     }
     //Returns Recipe List
     return Recipe.recipesFromSnapshot(recipesData);
+  }
+
+  // ignore: no_leading_underscores_for_local_identifiers
+  static Future<http.Response> delayedResponse(var _uri, var _headers) {
+    Future.delayed(const Duration(seconds: 1));
+    return http.get(_uri, headers: _headers);
   }
 }

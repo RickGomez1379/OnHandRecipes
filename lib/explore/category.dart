@@ -12,40 +12,75 @@ class Category extends StatefulWidget {
 }
 
 class CategoryState extends State<Category> {
+  //List of Recipes with Categories
+  List<List<Recipe>> list = [];
   //List for Recipes
   List<Recipe> recipes = [];
-  List<Recipe> all = [];
-  List<Recipe> vegan = [];
-  List<Recipe> mexican = [];
-  List<Recipe> japanese = [];
-  List<Recipe> american = [];
+  Recipe filledRecipe = Recipe(
+      name: "name",
+      image: "image",
+      rating: "rating",
+      serving: 0,
+      instructions: [],
+      ingredients: []);
 
   //For waiting on getRecipe
   bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    getRecipe();
-  }
-
-  Future<void> getRecipe() async {
-    recipes = await RecipesAPI.getRecipe(0, 20, 0);
-    vegan = await RecipesAPI.getRecipe(0, 20, 1);
-    mexican = await RecipesAPI.getRecipe(0, 20, 2);
-    japanese = await RecipesAPI.getRecipe(0, 20, 3);
-    american = await RecipesAPI.getRecipe(0, 20, 4);
-
-    setState(() {
-      all = recipes;
-      isLoading = false;
-    });
-  }
 
   //List for horizontal ListView
   List<String> categories = ["All", "Vegan", "Mexican", "Japanese", "American"];
   //Index for ListView
   int selectedIndex = 0;
+
+  //Fills List of Lists for Population by Index
+  void fillList() {
+    List<Recipe> filledList = [filledRecipe];
+    list = [filledList, filledList, filledList, filledList, filledList];
+  }
+
+//Creates Recipes Once
+  @override
+  void initState() {
+    super.initState();
+    fillList();
+    getRecipes();
+  }
+
+  //Populates List in Background
+  Future<void> getRecipes() async {
+    for (int i = 0; i < 5; i++) {
+      await Future.delayed(const Duration(milliseconds: 500), () async {
+        list[i] = await RecipesAPI.getRecipe(0, 40, i);
+        if (isLoading == true) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
+  }
+
+  //Manually Sets Recipes in List at Selected Index
+  Future<void> checkRecipe() async {
+    if (list[selectedIndex][0] == filledRecipe) {
+      setState(() {
+        if (isLoading == false) {
+          isLoading = true;
+        }
+      });
+      await Future.delayed(const Duration(milliseconds: 500), () async {
+        list[selectedIndex] = await RecipesAPI.getRecipe(0, 40, selectedIndex);
+      });
+      setState(() {
+        if (isLoading == true) {
+          isLoading = false;
+        }
+      });
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //Horizontal Scroll View
@@ -57,12 +92,11 @@ class CategoryState extends State<Category> {
             itemCount: categories.length,
             itemBuilder: (context, index) => buildCategory(categories, index)),
       ),
-      Recipe_Cards()
+      recipeCards()
     ]);
   }
 
-  // ignore: non_constant_identifier_names
-  Expanded Recipe_Cards() {
+  Expanded recipeCards() {
     return Expanded(
       child: isLoading
           ? const Center(
@@ -71,27 +105,31 @@ class CategoryState extends State<Category> {
           : ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
-              itemCount: recipes.length,
+              itemCount: list[selectedIndex].length,
               itemBuilder: (context, index) {
-                if (double.tryParse(recipes[index].rating.toString()) == null) {
+                if (double.tryParse(
+                        list[selectedIndex][index].rating.toString()) ==
+                    null) {
                   return InkWell(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Details(recipe: recipes[index]))),
+                        builder: (context) =>
+                            Details(recipe: list[selectedIndex][index]))),
                     child: RecipeCard(
-                        title: recipes[index].name,
-                        cardServings: recipes[index].serving,
+                        title: list[selectedIndex][index].name,
+                        cardServings: list[selectedIndex][index].serving,
                         cardRating: "no rating",
-                        cardImage: recipes[index].image),
+                        cardImage: list[selectedIndex][index].image),
                   );
                 } else {
                   return InkWell(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Details(recipe: recipes[index]))),
+                        builder: (context) =>
+                            Details(recipe: list[selectedIndex][index]))),
                     child: RecipeCard(
-                        title: recipes[index].name,
-                        cardServings: recipes[index].serving,
-                        cardRating: recipes[index].rating * 100,
-                        cardImage: recipes[index].image),
+                        title: list[selectedIndex][index].name,
+                        cardServings: list[selectedIndex][index].serving,
+                        cardRating: list[selectedIndex][index].rating * 100,
+                        cardImage: list[selectedIndex][index].image),
                   );
                 }
               }),
@@ -104,17 +142,7 @@ class CategoryState extends State<Category> {
       onTap: () {
         setState(() {
           selectedIndex = index;
-          if (selectedIndex == 0) {
-            recipes = all;
-          } else if (selectedIndex == 1) {
-            recipes = vegan;
-          } else if (selectedIndex == 2) {
-            recipes = mexican;
-          } else if (selectedIndex == 3) {
-            recipes = japanese;
-          } else if (selectedIndex == 4) {
-            recipes = american;
-          }
+          checkRecipe();
         });
       },
       child: Padding(
