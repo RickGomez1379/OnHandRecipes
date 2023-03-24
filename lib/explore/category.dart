@@ -38,6 +38,13 @@ class CategoryState extends State<Category> {
     list = [filledList, filledList, filledList, filledList, filledList];
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
 //Creates Recipes Once
   @override
   void initState() {

@@ -47,10 +47,13 @@ class HomeBody extends StatelessWidget {
       body: ListView(padding: const EdgeInsets.all(24), children: [
         //Navigate to
         //Explore Card
-        GestureDetector(
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => const Explore())),
-            child: containCard(exploreText, exploreSubtext, exploreURL)),
+        Hero(
+          tag: 'explore',
+          child: GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Explore())),
+              child: containCard(exploreText, exploreSubtext, exploreURL)),
+        ),
 
         const SizedBox(
           height: 8,

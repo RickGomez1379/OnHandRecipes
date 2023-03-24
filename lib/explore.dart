@@ -11,11 +11,6 @@ class Explore extends StatefulWidget {
 class ExploreState extends State<Explore> {
   @override
   Widget build(Object context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Explore Recipes"),
-      ),
-      body: const ExploreBody(),
-    );
+    return const ExploreBody();
   }
 }

@@ -7,6 +7,20 @@ class ExploreBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Category();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Explore Recipes"),
+        leading: IconButton(
+          //Back Arrow
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.yellow,
+            size: 18,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: const Category(),
+    );
   }
 }
