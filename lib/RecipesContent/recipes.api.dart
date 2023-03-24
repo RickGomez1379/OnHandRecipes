@@ -10,7 +10,7 @@ class RecipesAPI {
 
     //API header
     var header = {
-      'X-RapidAPI-Key': '3b2b2af678msh906e0026b70087dp10733djsn872a1320bb60',
+      'X-RapidAPI-Key': '19572cd20cmsha2f211c22121f8fp1cf7adjsn96a2f9cfc0f9',
       'X-RapidAPI-Host': 'tasty.p.rapidapi.com'
     };
 
