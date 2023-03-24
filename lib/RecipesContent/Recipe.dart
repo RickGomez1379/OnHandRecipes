@@ -2,7 +2,7 @@ class Recipe {
   //Recipe variables
   final String name;
   final String image;
-  final rating;
+  final double? rating;
   final int serving;
   final List<String> instructions;
   final List<String> ingredients;
@@ -11,7 +11,7 @@ class Recipe {
   Recipe(
       {required this.name,
       required this.image,
-      required this.rating,
+      this.rating,
       required this.serving,
       required this.instructions,
       required this.ingredients});
@@ -28,13 +28,23 @@ class Recipe {
         ingredientsJson.add(j["ingredient"]["name"]);
       }
     }
-    return Recipe(
-        name: json["name"] as String,
-        image: json["thumbnail_url"] as String,
-        rating: json["user_ratings"]['score'] ?? "no rating",
-        serving: json["num_servings"] as int,
-        instructions: instructionsJson,
-        ingredients: ingredientsJson);
+    if (double.tryParse((json['user_ratings']['score'].toString())) == null) {
+      return Recipe(
+          name: json["name"] as String,
+          image: json["thumbnail_url"] as String,
+          rating: 1.0,
+          serving: json["num_servings"] as int,
+          instructions: instructionsJson,
+          ingredients: ingredientsJson);
+    } else {
+      return Recipe(
+          name: json["name"] as String,
+          image: json["thumbnail_url"] as String,
+          rating: double.parse(json['user_ratings']['score'].toString()),
+          serving: json["num_servings"] as int,
+          instructions: instructionsJson,
+          ingredients: ingredientsJson);
+    }
   }
   //Returns List from API Snapshot
   static List<Recipe> recipesFromSnapshot(List snapshot) {

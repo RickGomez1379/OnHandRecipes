@@ -19,7 +19,7 @@ class CategoryState extends State<Category> {
   Recipe filledRecipe = Recipe(
       name: "name",
       image: "image",
-      rating: "rating",
+      rating: 1.0,
       serving: 0,
       instructions: [],
       ingredients: []);
@@ -50,7 +50,7 @@ class CategoryState extends State<Category> {
   Future<void> getRecipes() async {
     for (int i = 0; i < 5; i++) {
       await Future.delayed(const Duration(milliseconds: 500), () async {
-        list[i] = await RecipesAPI.getRecipe(0, 40, i);
+        list[i] = await RecipesAPI.getRecipe(0, 20, i);
         if (isLoading == true) {
           setState(() {
             isLoading = false;
@@ -69,7 +69,7 @@ class CategoryState extends State<Category> {
         }
       });
       await Future.delayed(const Duration(milliseconds: 500), () async {
-        list[selectedIndex] = await RecipesAPI.getRecipe(0, 40, selectedIndex);
+        list[selectedIndex] = await RecipesAPI.getRecipe(0, 20, selectedIndex);
       });
       setState(() {
         if (isLoading == true) {
@@ -114,22 +114,28 @@ class CategoryState extends State<Category> {
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             Details(recipe: list[selectedIndex][index]))),
-                    child: RecipeCard(
-                        title: list[selectedIndex][index].name,
-                        cardServings: list[selectedIndex][index].serving,
-                        cardRating: "no rating",
-                        cardImage: list[selectedIndex][index].image),
+                    child: Hero(
+                      tag: '$index',
+                      child: RecipeCard(
+                          title: list[selectedIndex][index].name,
+                          cardServings: list[selectedIndex][index].serving,
+                          cardRating: "no rating",
+                          cardImage: list[selectedIndex][index].image),
+                    ),
                   );
                 } else {
                   return InkWell(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             Details(recipe: list[selectedIndex][index]))),
-                    child: RecipeCard(
-                        title: list[selectedIndex][index].name,
-                        cardServings: list[selectedIndex][index].serving,
-                        cardRating: list[selectedIndex][index].rating * 100,
-                        cardImage: list[selectedIndex][index].image),
+                    child: Hero(
+                      tag: '$index',
+                      child: RecipeCard(
+                          title: list[selectedIndex][index].name,
+                          cardServings: list[selectedIndex][index].serving,
+                          cardRating: list[selectedIndex][index].rating! * 100,
+                          cardImage: list[selectedIndex][index].image),
+                    ),
                   );
                 }
               }),
