@@ -1,7 +1,9 @@
+// ignore_for_file: file_names
+
 class Recipe {
   //Recipe variables
   final String name;
-  final String image;
+  final String? image;
   final double? rating;
   final int serving;
   final List<String> instructions;
@@ -20,6 +22,7 @@ class Recipe {
   factory Recipe.fromJson(dynamic json) {
     List<String> instructionsJson = [];
     List<String> ingredientsJson = [];
+
     for (var i in json["instructions"]) {
       instructionsJson.add(i["display_text"]);
     }
@@ -28,20 +31,20 @@ class Recipe {
         ingredientsJson.add(j["ingredient"]["name"]);
       }
     }
-    if (double.tryParse((json['user_ratings']['score'].toString())) == null) {
+    if (double.tryParse((json['user_ratings']['score']).toString()) == null) {
       return Recipe(
-          name: json["name"] as String,
-          image: json["thumbnail_url"] as String,
+          name: json["name"],
+          image: json["thumbnail_url"],
           rating: 1.0,
-          serving: json["num_servings"] as int,
+          serving: json["num_servings"],
           instructions: instructionsJson,
           ingredients: ingredientsJson);
     } else {
       return Recipe(
-          name: json["name"] as String,
-          image: json["thumbnail_url"] as String,
+          name: json["name"],
+          image: json["thumbnail_url"],
           rating: double.parse(json['user_ratings']['score'].toString()),
-          serving: json["num_servings"] as int,
+          serving: json["num_servings"],
           instructions: instructionsJson,
           ingredients: ingredientsJson);
     }
@@ -52,10 +55,4 @@ class Recipe {
       return Recipe.fromJson(data);
     }).toList();
   }
-
-  //Test Results Output
-  // @override
-  // String toString() {
-  //   return 'Recipe {name: $name, image: $image, rating: $rating, servings: $serving }';
-  // }
 }

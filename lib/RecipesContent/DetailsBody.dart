@@ -25,15 +25,7 @@ class DetailBody extends StatelessWidget {
         ]),
       );
     }
-    // for (int i = 1; i <= 5; i++) {
-    //   instructions.add(
-    //     SizedBox(
-    //       child: Text(
-    //         recipe.ingredients[i],
-    //       ),
-    //     ),
-    //   );
-    // }
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -87,7 +79,7 @@ class DetailBody extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.black,
           image: DecorationImage(
-              image: NetworkImage(recipe.image), fit: BoxFit.cover)),
+              image: NetworkImage(recipe.image!), fit: BoxFit.cover)),
     );
   }
 }

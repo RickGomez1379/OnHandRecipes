@@ -38,6 +38,7 @@ class CategoryState extends State<Category> {
     list = [filledList, filledList, filledList, filledList, filledList];
   }
 
+//Makes sure setState will not Execute after dispose()
   @override
   void setState(fn) {
     if (mounted) {
@@ -127,7 +128,7 @@ class CategoryState extends State<Category> {
                           title: list[selectedIndex][index].name,
                           cardServings: list[selectedIndex][index].serving,
                           cardRating: "no rating",
-                          cardImage: list[selectedIndex][index].image),
+                          cardImage: list[selectedIndex][index].image!),
                     ),
                   );
                 } else {
@@ -141,7 +142,7 @@ class CategoryState extends State<Category> {
                           title: list[selectedIndex][index].name,
                           cardServings: list[selectedIndex][index].serving,
                           cardRating: list[selectedIndex][index].rating! * 100,
-                          cardImage: list[selectedIndex][index].image),
+                          cardImage: list[selectedIndex][index].image!),
                     ),
                   );
                 }

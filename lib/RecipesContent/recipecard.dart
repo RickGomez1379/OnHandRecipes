@@ -9,6 +9,7 @@ class RecipeCard extends StatelessWidget {
 
   //Recipe Card Constructor
   const RecipeCard({
+    super.key,
     required this.title,
     required this.cardServings,
     required this.cardRating,
