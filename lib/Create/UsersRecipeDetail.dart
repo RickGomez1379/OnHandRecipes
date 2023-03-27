@@ -89,7 +89,8 @@ class _UsersRecipeDetailState extends State<UsersRecipeDetail> {
                 ),
               ),
       );
-//Navigates to EditRecipe Screen, Edit Existing Object
+
+  //Navigates to EditRecipe Screen, Edit Existing Object
   Widget editButton() => IconButton(
       icon: const Icon(Icons.edit_outlined),
       onPressed: () async {

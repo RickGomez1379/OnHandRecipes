@@ -60,8 +60,6 @@ class DetailBody extends StatelessWidget {
                     ),
                   ]),
                 ),
-
-                // ProductTitleWithImage(product: product)
               ],
             ),
           )

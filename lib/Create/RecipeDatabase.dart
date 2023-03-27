@@ -17,6 +17,7 @@ class RecipeDatabase {
     return _database!;
   }
 
+  //Checks if Database Exists if not calls createDB()
   Future<Database> initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
